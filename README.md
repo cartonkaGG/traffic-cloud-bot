@@ -63,11 +63,45 @@ ngrok http 5173
 | Виплата | Запит виводу на USDT гаманець |
 | Адмін | Додавання оферів, схвалення виплат |
 
-## Production
+## Deploy на Vercel
+
+Проєкт налаштований для **Vercel Services** (frontend + backend в одному репо).
+
+### 1. Vercel Dashboard
+
+1. Import репо `traffic-cloud-bot`
+2. **Framework Preset** → **Services**
+3. Deploy (використовується `vercel.json`)
+
+### 2. Environment Variables (Vercel → Settings → Environment Variables)
+
+| Змінна | Значення |
+|--------|----------|
+| `BOT_TOKEN` | Токен від BotFather |
+| `ADMIN_TELEGRAM_IDS` | Твій Telegram ID |
+| `WEBAPP_URL` | `https://твій-домен.vercel.app` |
+| `WEBHOOK_URL` | `https://твій-домен.vercel.app/_/backend/webhook` |
+
+### 3. BotFather
+
+- **Menu Button URL:** `https://твій-домен.vercel.app`
+- **Domain:** `твій-домен.vercel.app`
+
+### Маршрути
+
+| Сервіс | URL |
+|--------|-----|
+| Mini App (frontend) | `/` |
+| API | `/_/backend/api/*` |
+| Webhook | `/_/backend/webhook` |
+| Health | `/_/backend/health` |
+
+> **Примітка:** на Vercel SQLite зберігається в `/tmp` (тимчасово). Для production з постійними даними підключи Turso або Vercel Postgres.
+
+## Production (VPS)
 
 ```bash
 cd frontend && npm run build
-# Розмісти dist/ на HTTPS хостингу (Vercel, Cloudflare Pages)
 # Backend на VPS з WEBHOOK_URL=https://your-api.com/webhook
 ```
 
@@ -75,8 +109,11 @@ cd frontend && npm run build
 
 ```
 traffic-cloud-bot/
+├── vercel.json                # Vercel Services config
 ├── backend/
+│   ├── index.js               # Vercel Express entry
 │   ├── src/
+│   │   ├── app.js             # Express app (serverless + local)
 │   │   ├── bot/handlers.js    # Telegram bot logic
 │   │   ├── routes/api.js      # REST API
 │   │   ├── db/                # SQLite

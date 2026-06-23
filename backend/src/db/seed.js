@@ -18,39 +18,45 @@ const sources = [
   { name: 'Instagram', slug: 'instagram', icon: 'instagram', color: '#E4405F' },
 ];
 
-const insertCat = db.prepare(
-  'INSERT OR IGNORE INTO categories (name, slug, icon, color, sort_order) VALUES (?, ?, ?, ?, ?)'
-);
-const insertSrc = db.prepare(
-  'INSERT OR IGNORE INTO traffic_sources (name, slug, icon, color) VALUES (?, ?, ?, ?)'
-);
-const insertOffer = db.prepare(`
-  INSERT OR IGNORE INTO offers (category_id, source_id, title, description, price_per_user, min_subscribers)
-  SELECT c.id, s.id, ?, ?, ?, ?
-  FROM categories c, traffic_sources s
-  WHERE c.slug = ? AND s.slug = ?
-  AND NOT EXISTS (
-    SELECT 1 FROM offers o WHERE o.category_id = c.id AND o.source_id = s.id AND o.title = ?
-  )
-`);
+export function seedIfEmpty() {
+  const count = db.prepare('SELECT COUNT(*) as c FROM categories').get().c;
+  if (count > 0) return;
 
-for (const c of categories) {
-  insertCat.run(c.name, c.slug, c.icon, c.color, c.sort_order);
+  const insertCat = db.prepare(
+    'INSERT OR IGNORE INTO categories (name, slug, icon, color, sort_order) VALUES (?, ?, ?, ?, ?)'
+  );
+  const insertSrc = db.prepare(
+    'INSERT OR IGNORE INTO traffic_sources (name, slug, icon, color) VALUES (?, ?, ?, ?)'
+  );
+  const insertOffer = db.prepare(`
+    INSERT OR IGNORE INTO offers (category_id, source_id, title, description, price_per_user, min_subscribers)
+    SELECT c.id, s.id, ?, ?, ?, ?
+    FROM categories c, traffic_sources s
+    WHERE c.slug = ? AND s.slug = ?
+    AND NOT EXISTS (
+      SELECT 1 FROM offers o WHERE o.category_id = c.id AND o.source_id = s.id AND o.title = ?
+    )
+  `);
+
+  for (const c of categories) {
+    insertCat.run(c.name, c.slug, c.icon, c.color, c.sort_order);
+  }
+  for (const s of sources) {
+    insertSrc.run(s.name, s.slug, s.icon, s.color);
+  }
+
+  const sampleOffers = [
+    ['Крипто канал — TikTok', 'Трафік з TikTok на крипто канал', 0.15, 100, 'crypto', 'tiktok'],
+    ['Трейдинг — Reels', 'Reels трафік на трейдинг канал', 0.12, 50, 'trading', 'reels'],
+    ['Спорт новини — Shorts', 'YouTube Shorts на спорт канал', 0.10, 200, 'sports', 'shorts'],
+    ['Афіші — TG Спам', 'Telegram спам на афіші', 0.08, 500, 'events', 'tg-spam'],
+    ['Новини — Instagram', 'Instagram трафік на новини', 0.11, 100, 'news', 'instagram'],
+  ];
+
+  for (const [title, desc, price, min, cat, src] of sampleOffers) {
+    insertOffer.run(title, desc, price, min, cat, src, title);
+  }
 }
-for (const s of sources) {
-  insertSrc.run(s.name, s.slug, s.icon, s.color);
-}
 
-const sampleOffers = [
-  ['Крипто канал — TikTok', 'Трафік з TikTok на крипто канал', 0.15, 100, 'crypto', 'tiktok'],
-  ['Трейдинг — Reels', 'Reels трафік на трейдинг канал', 0.12, 50, 'trading', 'reels'],
-  ['Спорт новини — Shorts', 'YouTube Shorts на спорт канал', 0.10, 200, 'sports', 'shorts'],
-  ['Афіші — TG Спам', 'Telegram спам на афіші', 0.08, 500, 'events', 'tg-spam'],
-  ['Новини — Instagram', 'Instagram трафік на новини', 0.11, 100, 'news', 'instagram'],
-];
-
-for (const [title, desc, price, min, cat, src] of sampleOffers) {
-  insertOffer.run(title, desc, price, min, cat, src, title);
-}
-
+seedIfEmpty();
 console.log('Database seeded successfully');

@@ -4,7 +4,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(__dirname, '../../data');
+const dataDir = process.env.VERCEL
+  ? '/tmp'
+  : path.join(__dirname, '../../data');
 mkdirSync(dataDir, { recursive: true });
 const dbPath = path.join(dataDir, 'traffic-cloud.db');
 
