@@ -58,8 +58,8 @@ export function initTelegram() {
   if (tg) {
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#0F172A');
-    tg.setBackgroundColor('#0F172A');
+    tg.setHeaderColor('#030712');
+    tg.setBackgroundColor('#030712');
   }
   return tg;
 }

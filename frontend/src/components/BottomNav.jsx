@@ -10,8 +10,8 @@ const tabs = [
 
 export default function BottomNav({ active, onChange, isAdmin, onAdmin }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-background via-background to-transparent">
-      <div className="glass rounded-2xl flex items-center justify-around p-1">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-ink via-ink/95 to-transparent">
+      <div className="glass-panel-strong flex items-center justify-around p-1">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = active === tab.id;
@@ -24,12 +24,16 @@ export default function BottomNav({ active, onChange, isAdmin, onAdmin }) {
               {isActive && (
                 <motion.div
                   layoutId="nav-indicator"
-                  className="absolute inset-0 bg-accent/20 rounded-xl"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  className="absolute inset-0 rounded-xl bg-accent/10 shadow-[inset_0_0_0_1px_rgba(94,200,255,0.25)]"
+                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
                 />
               )}
-              <Icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-accent' : 'text-muted'}`} />
-              <span className={`text-[10px] relative z-10 ${isActive ? 'text-accent font-medium' : 'text-muted'}`}>
+              <Icon
+                className={`w-5 h-5 relative z-10 ${isActive ? 'text-accent' : 'text-zinc-500'}`}
+              />
+              <span
+                className={`text-[10px] relative z-10 ${isActive ? 'text-white font-medium' : 'text-zinc-500'}`}
+              >
                 {tab.label}
               </span>
             </button>
@@ -40,8 +44,17 @@ export default function BottomNav({ active, onChange, isAdmin, onAdmin }) {
             onClick={onAdmin}
             className="relative flex flex-col items-center gap-0.5 py-2 px-3 cursor-pointer min-w-[60px]"
           >
-            <Settings className={`w-5 h-5 ${active === 'admin' ? 'text-primary' : 'text-muted'}`} />
-            <span className={`text-[10px] ${active === 'admin' ? 'text-primary font-medium' : 'text-muted'}`}>
+            {active === 'admin' && (
+              <motion.div
+                layoutId="nav-indicator-admin"
+                className="absolute inset-0 rounded-xl bg-accent/10 shadow-[inset_0_0_0_1px_rgba(94,200,255,0.25)]"
+                transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+              />
+            )}
+            <Settings className={`w-5 h-5 relative z-10 ${active === 'admin' ? 'text-accent' : 'text-zinc-500'}`} />
+            <span
+              className={`text-[10px] relative z-10 ${active === 'admin' ? 'text-white font-medium' : 'text-zinc-500'}`}
+            >
               Адмін
             </span>
           </button>

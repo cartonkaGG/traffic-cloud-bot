@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import {
   AreaChart,
   Area,
@@ -11,13 +10,15 @@ import {
 } from 'recharts';
 import { formatMoney } from '../utils';
 
+const ACCENT = '#5ec8ff';
+
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass rounded-lg px-3 py-2 text-sm">
-      <p className="text-muted">{label}</p>
+    <div className="glass-panel rounded-xl px-3 py-2 text-sm">
+      <p className="text-zinc-500 text-xs">{label}</p>
       {payload.map((p) => (
-        <p key={p.name} style={{ color: p.color }}>
+        <p key={p.name} style={{ color: p.color }} className="font-medium">
           {p.name}: {p.name === 'earnings' ? formatMoney(p.value) : p.value}
         </p>
       ))}
@@ -28,7 +29,7 @@ function CustomTooltip({ active, payload, label }) {
 export function EarningsChart({ data }) {
   if (!data?.length) {
     return (
-      <div className="h-48 flex items-center justify-center text-muted text-sm">
+      <div className="h-48 flex items-center justify-center text-zinc-500 text-sm">
         Немає даних для графіка
       </div>
     );
@@ -44,18 +45,18 @@ export function EarningsChart({ data }) {
       <AreaChart data={formatted}>
         <defs>
           <linearGradient id="earningsGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.4} />
-            <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0} />
+            <stop offset="0%" stopColor={ACCENT} stopOpacity={0.35} />
+            <stop offset="100%" stopColor={ACCENT} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <XAxis dataKey="date" tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} width={40} />
+        <XAxis dataKey="date" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} width={40} />
         <Tooltip content={<CustomTooltip />} />
         <Area
           type="monotone"
           dataKey="earnings"
           name="earnings"
-          stroke="#8B5CF6"
+          stroke={ACCENT}
           fill="url(#earningsGrad)"
           strokeWidth={2}
         />
@@ -67,7 +68,7 @@ export function EarningsChart({ data }) {
 export function SubscribersChart({ data }) {
   if (!data?.length) {
     return (
-      <div className="h-48 flex items-center justify-center text-muted text-sm">
+      <div className="h-48 flex items-center justify-center text-zinc-500 text-sm">
         Немає даних
       </div>
     );
@@ -81,23 +82,12 @@ export function SubscribersChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={180}>
       <BarChart data={formatted} barGap={2}>
-        <XAxis dataKey="date" tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} width={30} />
+        <XAxis dataKey="date" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} width={30} />
         <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="joins" name="Вхід" fill="#10B981" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="leaves" name="Вихід" fill="#EF4444" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="joins" name="Вхід" fill="#34d399" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="leaves" name="Вихід" fill="#f87171" radius={[4, 4, 0, 0]} />
       </BarChart>
-    </ResponsiveContainer>
-  );
-}
-
-export function MiniSparkline({ data, color = '#8B5CF6' }) {
-  if (!data?.length) return null;
-  return (
-    <ResponsiveContainer width="100%" height={40}>
-      <AreaChart data={data}>
-        <Area type="monotone" dataKey="earnings" stroke={color} fill={`${color}33`} strokeWidth={1.5} />
-      </AreaChart>
     </ResponsiveContainer>
   );
 }

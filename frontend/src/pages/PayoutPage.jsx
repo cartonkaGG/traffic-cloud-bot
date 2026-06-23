@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { api } from '../api';
-import { Card, Button, EmptyState } from '../components/ui';
+import { Card, Button, EmptyState, PageTitle } from '../components/ui';
 import { formatMoney, staggerContainer, fadeUp } from '../utils';
 
 const statusConfig = {
@@ -43,15 +43,12 @@ export default function PayoutPage({ user, onRefresh }) {
 
   return (
     <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-5">
-      <div>
-        <h1 className="font-heading text-2xl font-bold">Виплата</h1>
-        <p className="text-muted text-sm mt-1">Мінімальна сума — $10</p>
-      </div>
+      <PageTitle title="Виплата" subtitle="Мінімальна сума — $10" />
 
       <motion.div variants={fadeUp}>
         <Card glow>
-          <p className="text-muted text-sm">Доступно для виводу</p>
-          <p className="font-heading text-3xl font-bold text-primary mt-1">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">Доступно для виводу</p>
+          <p className="billing-price-sale text-3xl font-bold mt-2">
             {formatMoney(user?.balance)}
           </p>
         </Card>
@@ -61,7 +58,7 @@ export default function PayoutPage({ user, onRefresh }) {
         <Card>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm text-muted block mb-1">Сума ($)</label>
+              <label className="text-sm text-zinc-500 block mb-1">Сума ($)</label>
               <input
                 type="number"
                 step="0.01"
@@ -70,18 +67,18 @@ export default function PayoutPage({ user, onRefresh }) {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="10.00"
-                className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+                className="tc-input"
                 required
               />
             </div>
             <div>
-              <label className="text-sm text-muted block mb-1">Гаманець (USDT TRC20)</label>
+              <label className="text-sm text-zinc-500 block mb-1">Гаманець (USDT TRC20)</label>
               <input
                 type="text"
                 value={wallet}
                 onChange={(e) => setWallet(e.target.value)}
                 placeholder="T..."
-                className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+                className="tc-input"
                 required
               />
             </div>
@@ -100,7 +97,7 @@ export default function PayoutPage({ user, onRefresh }) {
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <h2 className="font-heading font-semibold mb-3">Історія</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-600 mb-3">Історія</h2>
         {payouts.length === 0 ? (
           <EmptyState icon={Wallet} title="Немає виплат" description="Тут з'являться ваші запити на виплату" />
         ) : (
@@ -111,8 +108,8 @@ export default function PayoutPage({ user, onRefresh }) {
               return (
                 <Card key={p.id} className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">{formatMoney(p.amount)}</p>
-                    <p className="text-xs text-muted mt-0.5">{p.created_at?.slice(0, 10)}</p>
+                    <p className="font-medium text-white">{formatMoney(p.amount)}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">{p.created_at?.slice(0, 10)}</p>
                   </div>
                   <div className="flex items-center gap-1.5" style={{ color: cfg.color }}>
                     <StatusIcon className="w-4 h-4" />

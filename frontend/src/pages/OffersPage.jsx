@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import { api } from '../api';
-import { Card, Badge, Button, EmptyState } from '../components/ui';
+import { Card, Badge, Button, EmptyState, PageTitle } from '../components/ui';
 import { IconByName, formatMoney, staggerContainer, fadeUp } from '../utils';
 import { Layers } from 'lucide-react';
 
@@ -54,7 +54,7 @@ export default function OffersPage() {
       <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
         <button
           onClick={() => setSelectedOffer(null)}
-          className="flex items-center gap-2 text-muted hover:text-foreground cursor-pointer transition-colors"
+          className="flex items-center gap-2 text-zinc-500 hover:text-white cursor-pointer transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Назад
         </button>
@@ -68,7 +68,7 @@ export default function OffersPage() {
               <IconByName name={selectedOffer.category_icon} style={{ color: selectedOffer.category_color }} />
             </div>
             <div>
-              <h1 className="font-heading font-bold text-lg">{selectedOffer.title}</h1>
+              <h1 className="font-bold text-lg text-white">{selectedOffer.title}</h1>
               <div className="flex gap-2 mt-1">
                 <Badge color={selectedOffer.category_color}>{selectedOffer.category_name}</Badge>
                 <Badge color={selectedOffer.source_color}>{selectedOffer.source_name}</Badge>
@@ -76,15 +76,15 @@ export default function OffersPage() {
             </div>
           </div>
 
-          <p className="text-muted text-sm mb-4">{selectedOffer.description}</p>
+          <p className="text-zinc-500 text-sm mb-4">{selectedOffer.description}</p>
 
-          <div className="glass rounded-xl p-4 mb-4">
-            <p className="text-muted text-xs">Ціна за підписника</p>
-            <p className="font-heading text-3xl font-bold text-primary">
+          <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 mb-4">
+            <p className="text-[11px] uppercase tracking-wider text-zinc-500">Ціна за підписника</p>
+            <p className="billing-price-sale text-3xl font-bold mt-1">
               {formatMoney(selectedOffer.price_per_user)}
             </p>
             {selectedOffer.min_subscribers > 0 && (
-              <p className="text-xs text-muted mt-1">Мін. підписників: {selectedOffer.min_subscribers}</p>
+              <p className="text-xs text-zinc-500 mt-1">Мін. підписників: {selectedOffer.min_subscribers}</p>
             )}
           </div>
 
@@ -104,18 +104,15 @@ export default function OffersPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="font-heading text-2xl font-bold">Офери</h1>
-        <p className="text-muted text-sm mt-1">Обери напрямок та джерело трафіку</p>
-      </div>
+      <PageTitle title="Офери" subtitle="Обери напрямок та джерело трафіку" />
 
       <div>
-        <p className="text-sm text-muted mb-2">Напрямок</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500 mb-2">Напрямок</p>
         <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory(null)}
             className={`shrink-0 px-3 py-2 rounded-xl text-sm cursor-pointer transition-colors ${
-              !selectedCategory ? 'bg-accent text-white' : 'glass text-muted hover:text-foreground'
+              !selectedCategory ? 'bg-accent/20 text-accent border border-accent/35 shadow-[inset_0_0_0_1px_rgba(94,200,255,0.2)]' : 'border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Всі
@@ -125,7 +122,7 @@ export default function OffersPage() {
               key={cat.id}
               onClick={() => setSelectedCategory(cat.slug)}
               className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-sm cursor-pointer transition-colors ${
-                selectedCategory === cat.slug ? 'text-white' : 'glass text-muted hover:text-foreground'
+                selectedCategory === cat.slug ? 'text-white border border-white/10' : 'border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-zinc-200'
               }`}
               style={selectedCategory === cat.slug ? { backgroundColor: cat.color } : {}}
             >
@@ -137,12 +134,12 @@ export default function OffersPage() {
       </div>
 
       <div>
-        <p className="text-sm text-muted mb-2">Джерело трафіку</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500 mb-2">Джерело трафіку</p>
         <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
           <button
             onClick={() => setSelectedSource(null)}
             className={`shrink-0 px-3 py-2 rounded-xl text-sm cursor-pointer transition-colors ${
-              !selectedSource ? 'bg-primary text-background font-medium' : 'glass text-muted hover:text-foreground'
+              !selectedSource ? 'bg-accent/20 text-accent border border-accent/35' : 'border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Всі
@@ -152,7 +149,7 @@ export default function OffersPage() {
               key={src.id}
               onClick={() => setSelectedSource(src.slug)}
               className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-sm cursor-pointer transition-colors ${
-                selectedSource === src.slug ? 'text-white' : 'glass text-muted hover:text-foreground'
+                selectedSource === src.slug ? 'text-white border border-white/10' : 'border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-zinc-200'
               }`}
               style={selectedSource === src.slug ? { backgroundColor: src.color } : {}}
             >
@@ -184,16 +181,16 @@ export default function OffersPage() {
                         <IconByName name={offer.source_icon} style={{ color: offer.source_color }} />
                       </div>
                       <div>
-                        <p className="font-medium">{offer.title}</p>
-                        <div className="flex gap-2 mt-1">
+                        <p className="font-medium text-white">{offer.title}</p>
+                        <div className="flex gap-2 mt-1 flex-wrap">
                           <Badge color={offer.category_color}>{offer.category_name}</Badge>
-                          <span className="text-primary font-semibold text-sm">
+                          <span className="text-accent font-semibold text-sm">
                             {formatMoney(offer.price_per_user)}/підп.
                           </span>
                         </div>
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-muted" />
+                    <ChevronRight className="w-5 h-5 text-zinc-600" />
                   </div>
                 </Card>
               </motion.div>

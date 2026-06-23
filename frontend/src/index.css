@@ -2,33 +2,117 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-neon-cloud: hsl(195, 100%, 55%);
+  --color-cloud-accent: var(--color-neon-cloud);
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-body {
-  @apply bg-background text-foreground font-body antialiased;
-  margin: 0;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    margin: 0;
+  }
 
-#root {
-  min-height: 100vh;
+  body {
+    @apply font-sans tracking-tight antialiased text-gray-100/90;
+    background-color: #030712;
+    background-image:
+      radial-gradient(ellipse 120% 80% at 50% -30%, rgba(34, 211, 238, 0.1), transparent),
+      radial-gradient(ellipse 70% 50% at 100% 0%, rgba(99, 102, 241, 0.08), transparent 55%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: auto, auto, 56px 56px, 56px 56px;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #030712;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-700/80;
+  }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-surface/60 backdrop-blur-xl border border-white/10;
+  .glass-panel {
+    @apply rounded-2xl border border-gray-800/80 bg-gray-950/60 shadow-glass backdrop-blur-xl;
   }
 
-  .text-glow {
-    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  .glass-panel-strong {
+    @apply rounded-2xl border border-gray-700/60 bg-gray-950/75 shadow-glass backdrop-blur-xl;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-br from-white via-cyan-100/90 to-blue-300/80 bg-clip-text text-transparent;
+  }
+
+  .vu-cta {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.95) 0%, rgba(59, 130, 246, 0.92) 55%, rgba(99, 102, 241, 0.9) 100%);
+    box-shadow:
+      0 0 0 1px rgba(94, 200, 255, 0.25),
+      0 12px 40px -12px rgba(34, 211, 238, 0.45);
+  }
+
+  .vu-cta:not(:disabled):hover {
+    box-shadow:
+      0 0 0 1px rgba(94, 200, 255, 0.4),
+      0 16px 48px -10px rgba(34, 211, 238, 0.55);
+  }
+
+  .neon-cloud-icon {
+    color: var(--color-neon-cloud);
+    filter:
+      drop-shadow(0 0 5px hsl(195, 100%, 65%))
+      drop-shadow(0 0 15px hsl(195, 100%, 45%));
+  }
+
+  .billing-price-sale {
+    background: linear-gradient(120deg, #fff 0%, #a5f3fc 45%, #e0f7ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 28px rgb(34 211 238 / 0.28));
+  }
+
+  .admin-stat-card {
+    @apply rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-colors hover:border-white/[0.12] hover:bg-white/[0.05];
+  }
+
+  .admin-tab {
+    @apply cursor-pointer rounded-xl border px-4 py-2.5 text-[13px] font-medium transition-[border-color,background-color,color] duration-200;
+  }
+
+  .admin-tab--active {
+    @apply border-accent/35 bg-accent/15 text-accent;
+  }
+
+  .admin-tab--idle {
+    @apply border-white/[0.08] bg-white/[0.03] text-zinc-400;
+  }
+
+  .tc-input {
+    @apply w-full rounded-xl border border-white/[0.10] bg-black/30 px-4 py-3 text-sm text-white outline-none transition-[border-color,box-shadow] duration-200;
+  }
+
+  .tc-input:focus {
+    border-color: rgba(94, 200, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(94, 200, 255, 0.12);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
