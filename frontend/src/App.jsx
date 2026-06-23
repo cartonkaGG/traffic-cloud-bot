@@ -54,7 +54,7 @@ export default function App() {
       case 'home':
         return <HomePage user={user} stats={stats} onNavigate={setPage} />;
       case 'offers':
-        return <OffersPage />;
+        return <OffersPage onNavigate={setPage} />;
       case 'channels':
         return <ChannelsPage />;
       case 'payout':
